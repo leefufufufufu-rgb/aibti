@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AIBTI · 16 型人物画廊</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e8e8f0;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 60px 24px 80px;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(168,85,247,0.12), transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(251,191,36,0.08), transparent 50%),
+      radial-gradient(ellipse at 20% 70%, rgba(0,255,136,0.08), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(96,165,250,0.08), transparent 50%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 60px; }
+  .tag {
+    display: inline-block; padding: 6px 14px;
+    border: 1px solid #252534; border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: #8888a0; margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(40px, 7vw, 72px); font-weight: 800; letter-spacing: -2px;
+    background: linear-gradient(90deg, #a855f7, #fbbf24, #00ff88, #60a5fa);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 12px;
+  }
+  .sub { color: #8888a0; font-size: 18px; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+  .tribe { margin-bottom: 60px; }
+  .tribe-header {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    letter-spacing: 4px; text-transform: uppercase;
+    padding: 8px 16px; margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 12px;
+    border-radius: 6px;
+  }
+  .tribe-mystic { color: #a855f7; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); }
+  .tribe-preacher { color: #fbbf24; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); }
+  .tribe-sniper { color: #00ff88; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); }
+  .tribe-craftsman { color: #60a5fa; background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: rgba(24,24,34,0.5);
+    border: 1px solid #252534;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--c, #a855f7);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px var(--glow, rgba(168,85,247,0.2));
+  }
+  .card .portrait {
+    aspect-ratio: 240/320;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, rgba(var(--rgb, 168,85,247), 0.08), transparent);
+    padding: 16px;
+    position: relative;
+  }
+  .card .portrait::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(var(--rgb, 168,85,247), 0.12), transparent 60%);
+    pointer-events: none;
+  }
+  .card img { width: 100%; max-width: 220px; height: auto; filter: drop-shadow(0 0 20px rgba(var(--rgb, 168,85,247), 0.3)); position: relative; z-index: 1; }
+  .card .info {
+    padding: 16px 20px 20px;
+    border-top: 1px solid rgba(var(--rgb, 168,85,247), 0.2);
+  }
+  .card .code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--c, #a855f7); font-weight: 700;
+    letter-spacing: 2px; margin-bottom: 4px;
+  }
+  .card .name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .card .slogan { font-size: 12px; color: #8888a0; font-style: italic; line-height: 1.4; }
+
+  .card-mystic { --c: #a855f7; --rgb: 168,85,247; --glow: rgba(168,85,247,0.3); }
+  .card-preacher { --c: #fbbf24; --rgb: 251,191,36; --glow: rgba(251,191,36,0.3); }
+  .card-sniper { --c: #00ff88; --rgb: 0,255,136; --glow: rgba(0,255,136,0.3); }
+  .card-craftsman { --c: #60a5fa; --rgb: 96,165,250; --glow: rgba(96,165,250,0.3); }
+
+  footer {
+    margin-top: 80px; padding-top: 40px;
+    border-top: 1px solid #252534;
+    text-align: center; color: #55556a; font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .back-link {
+    display: inline-block; margin-top: 12px;
+    padding: 8px 20px; border: 1px solid #252534; border-radius: 6px;
+    color: #8888a0; text-decoration: none;
+  }
+  .back-link:hover { border-color: #00ff88; color: #00ff88; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="tag">◉ PORTRAIT GALLERY · v0.1.0</div>
+    <h1>16 型 · 人物画廊</h1>
+    <p class="sub">线稿立绘 · 四大阵营配色 · 每张都有标志性道具和姿势</p>
+  </header>
+
+  <div class="tribe">
+    <div class="tribe-header tribe-mystic">🌫 Mystic · 玄学派 · Abstract + Minimal</div>
+    <div class="grid">
+      <div class="card card-mystic"><div class="portrait"><img src="amde.svg"></div><div class="info"><div class="code">AMDE</div><div class="name">甩锅侠</div><div class="slogan">"搞定它，别问我怎么搞"</div></div></div>
+      <div class="card card-mystic"><div class="portrait"><img src="amdx.svg"></div><div class="info"><div class="code">AMDX</div><div class="name">凌晨哲学家</div><div class="slogan">"三点钟灵魂拷问 AI"</div></div></div>
+      <div class="card card-mystic"><div class="portrait"><img src="amle.svg"></div><div class="info"><div class="code">AMLE</div><div class="name">佛系甲方</div><div class="slogan">"你看着办"</div></div></div>
+      <div class="card card-mystic"><div class="portrait"><img src="amlx.svg"></div><div class="info"><div class="code">AMLX</div><div class="name">碎碎念诗人</div><div class="slogan">"有没有更优雅的方式"</div></div></div>
+    </div>
+  </div>
+
+  <div class="tribe">
+    <div class="tribe-header tribe-preacher">📜 Preacher · 布道派 · Abstract + Verbose</div>
+    <div class="grid">
+      <div class="card card-preacher"><div class="portrait"><img src="avde.svg"></div><div class="info"><div class="code">AVDE</div><div class="name">PRD 暴君</div><div class="slogan">"三页文档，配一句'做'"</div></div></div>
+      <div class="card card-preacher"><div class="portrait"><img src="avdx.svg"></div><div class="info"><div class="code">AVDX</div><div class="name">战略 PPT 家</div><div class="slogan">"铺完上下文再发问"</div></div></div>
+      <div class="card card-preacher"><div class="portrait"><img src="avle.svg"></div><div class="info"><div class="code">AVLE</div><div class="name">架构布道士</div><div class="slogan">"讲完概念，一起干"</div></div></div>
+      <div class="card card-preacher"><div class="portrait"><img src="avlx.svg"></div><div class="info"><div class="code">AVLX</div><div class="name">小作文 PM</div><div class="slogan">"小作文 + 三选一"</div></div></div>
+    </div>
+  </div>
+
+  <div class="tribe">
+    <div class="tribe-header tribe-sniper">🎯 Sniper · 狙击派 · Concrete + Minimal</div>
+    <div class="grid">
+      <div class="card card-sniper"><div class="portrait"><img src="cmde.svg"></div><div class="info"><div class="code">CMDE</div><div class="name">祈使句机枪手</div><div class="slogan">"精准定位，精准开火"</div></div></div>
+      <div class="card card-sniper"><div class="portrait"><img src="cmdx.svg"></div><div class="info"><div class="code">CMDX</div><div class="name">Bug 侦探</div><div class="slogan">"拿证据问案情"</div></div></div>
+      <div class="card card-sniper"><div class="portrait"><img src="cmle.svg"></div><div class="info"><div class="code">CMLE</div><div class="name">结对搭子</div><div class="slogan">"边写边聊"</div></div></div>
+      <div class="card card-sniper"><div class="portrait"><img src="cmlx.svg"></div><div class="info"><div class="code">CMLX</div><div class="name">卡点求助侠</div><div class="slogan">"卡哪问哪"</div></div></div>
+    </div>
+  </div>
+
+  <div class="tribe">
+    <div class="tribe-header tribe-craftsman">🔨 Craftsman · 工匠派 · Concrete + Verbose</div>
+    <div class="grid">
+      <div class="card card-craftsman"><div class="portrait"><img src="cvde.svg"></div><div class="info"><div class="code">CVDE</div><div class="name">甲方爸爸</div><div class="slogan">"完整需求 + '做完给我'"</div></div></div>
+      <div class="card card-craftsman"><div class="portrait"><img src="cvdx.svg"></div><div class="info"><div class="code">CVDX</div><div class="name">技术侦察兵</div><div class="slogan">"讲清战场问最优解"</div></div></div>
+      <div class="card card-craftsman"><div class="portrait"><img src="cvle.svg"></div><div class="info"><div class="code">CVLE</div><div class="name">技术导师</div><div class="slogan">"陪你一步步来"</div></div></div>
+      <div class="card card-craftsman"><div class="portrait"><img src="cvlx.svg"></div><div class="info"><div class="code">CVLX</div><div class="name">苏格拉底码农</div><div class="slogan">"为啥不用 X？那 Y 呢？"</div></div></div>
+    </div>
+  </div>
+
+  <footer>
+    ◉ AIBTI · 16 Portraits · v0.1.0-alpha
+    <br><br>
+    <a href="../index.html" class="back-link">← 回到主页</a>
+  </footer>
+</div>
+</body>
+</html>
