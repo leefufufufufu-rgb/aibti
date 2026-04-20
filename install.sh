@@ -34,13 +34,15 @@ mkdir -p "$DATA_DIR/portraits"
 chmod 700 "$DATA_DIR" 2>/dev/null || true
 
 curl -sfL "$RAW/report-template.html" -o "$DATA_DIR/report-template.html"
-printf "  "
 PORTRAITS=(amde amdx amle amlx avde avdx avle avlx cmde cmdx cmle cmlx cvde cvdx cvle cvlx)
-for code in "${PORTRAITS[@]}"; do
-    curl -sfL "$RAW/portraits/${code}.svg" -o "$DATA_DIR/portraits/${code}.svg"
-    printf "."
+TOTAL=${#PORTRAITS[@]}
+for i in "${!PORTRAITS[@]}"; do
+    code="${PORTRAITS[$i]}"
+    N=$((i+1))
+    printf "\r  [%2d/%d] downloading portraits/%s.svg ... " "$N" "$TOTAL" "$code"
+    curl -sfL "$RAW/portraits/${code}.svg" -o "$DATA_DIR/portraits/${code}.svg" && printf "${GREEN}✓${NC}" || printf "${YELLOW}×${NC}"
 done
-echo -e "\n${GREEN}  ✓ Report template + 16 portrait SVGs installed${NC}"
+printf "\r${GREEN}  ✓ Report template + %d portrait SVGs installed                        ${NC}\n" "$TOTAL"
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
