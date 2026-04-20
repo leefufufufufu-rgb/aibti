@@ -31,7 +31,9 @@ Analyze my AIBTI       # English
 测一下我的 AIBTI        # 中文
 ```
 
-That's it. You'll get a personality report based on your real prompts from the last 7 days.
+You'll get **two things**:
+1. A rich terminal report (with diagnostics backed by AI research)
+2. A beautiful HTML report at `~/.aibti/report.html` — **Tier-4 Legendary badges animate in glowing gold-purple gradient**. Open it in any browser.
 
 **No signup · No API key · No network · No server.**
 
