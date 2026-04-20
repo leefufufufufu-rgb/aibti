@@ -64,6 +64,15 @@ description: 用 LLM 语义理解分析本地 Claude Code / Cursor / Codex / Cop
 
 ## 步骤
 
+### -1. 语言判定（最先做！决定整份报告语言）
+
+**检测用户语言**：
+- 看**本次请求** prompt：如果是中文 → `zh`
+- 看**最近 7 天** prompt 语言比例：中文 > 50% → `zh`，否则 → `en`
+- 看系统 locale：`echo $LANG`（`zh_CN` → zh，`en_US` → en）
+
+**一旦确定，整份报告所有文字（终端 + HTML）都用这个语言**。不要混用。
+
 ### 0. 先拿本地时区（重要！所有时间判定都基于本地）
 
 JSONL 里的 `timestamp` 都是 **UTC**（`.Z` 后缀）。用户在不同时区：
