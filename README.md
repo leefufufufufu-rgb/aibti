@@ -6,14 +6,32 @@
 
 **Behavior doesn't lie. Your prompts betray who you really are.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-blueviolet)](https://docs.claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-0.1.0--alpha-orange.svg)](./CHANGELOG.md)
-[![Website](https://img.shields.io/badge/Website-wengui.xyz/aibti-00ff88.svg)](https://wengui.xyz/aibti)
+**Works with: Claude Code · Cursor · Codex · Copilot Chat**
 
-**[English](#english)** · **[中文](#中文)** · 🎨 **[Live Demo](https://wengui.xyz/aibti)** · 🖼 **[16 Portraits](https://wengui.xyz/aibti/portraits/)**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-00ff88.svg)](./PRIVACY.md)
+[![Zero Telemetry](https://img.shields.io/badge/Telemetry-Zero-00ff88.svg)](./PRIVACY.md)
+[![Auditable](https://img.shields.io/badge/Code-Auditable-blue.svg)](https://github.com/leefufufufufu-rgb/aibti)
+[![Version](https://img.shields.io/badge/version-0.2.0-orange.svg)](https://github.com/leefufufufufu-rgb/aibti/releases)
+
+**[English](#english)** · **[中文](#中文)** · 🎨 **[Live Demo](https://leefufufufufu-rgb.github.io/aibti/)** · 🖼 **[16 Portraits](https://leefufufufufu-rgb.github.io/aibti/portraits/)** · 🔒 **[Privacy](./PRIVACY.md)**
 
 </div>
+
+## 🔒 Privacy Manifesto (read this first)
+
+```
+✓  100% local — your prompts never leave your machine
+✓  Zero network requests — verifiable in < 5 lines of code
+✓  Zero telemetry, zero analytics, zero account
+✓  MIT open-source — every file is auditable (~50 files total)
+✓  Auto-redaction — emails / API keys / phone numbers masked before anything is written
+✗  No cloud. No server. No "free tier". No "upgrade to pro".
+```
+
+**Verify for yourself**: `./scripts/check-network.sh` — proves AIBTI makes zero network calls. See [PRIVACY.md](./PRIVACY.md) for the full deep-dive.
+
+---
 
 ---
 
