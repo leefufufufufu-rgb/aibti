@@ -8,11 +8,12 @@
 
 **Works with: Claude Code · Cursor · Codex · Copilot Chat**
 
+[![GitHub stars](https://img.shields.io/github/stars/leefufufufufu-rgb/aibti?style=social)](https://github.com/leefufufufufu-rgb/aibti/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-00ff88.svg)](./PRIVACY.md)
 [![Zero Telemetry](https://img.shields.io/badge/Telemetry-Zero-00ff88.svg)](./PRIVACY.md)
-[![Auditable](https://img.shields.io/badge/Code-Auditable-blue.svg)](https://github.com/leefufufufufu-rgb/aibti)
-[![Version](https://img.shields.io/badge/version-0.2.0-orange.svg)](https://github.com/leefufufufufu-rgb/aibti/releases)
+[![Version](https://img.shields.io/badge/version-0.3.x-orange.svg)](https://github.com/leefufufufufu-rgb/aibti/releases)
+[![Good First Issues](https://img.shields.io/github/issues/leefufufufufu-rgb/aibti/good%20first%20issue.svg)](https://github.com/leefufufufufu-rgb/aibti/issues?q=is%3Aopen+label%3A%22good+first+issue%22)
 
 **[English](#english)** · **[中文](#中文)** · 🎨 **[Live Demo](https://leefufufufufu-rgb.github.io/aibti/)** · 🖼 **[16 Portraits](https://leefufufufufu-rgb.github.io/aibti/portraits/)** · 🔒 **[Privacy](./PRIVACY.md)**
 
@@ -373,8 +374,14 @@ MIT · *Not affiliated with MBTI®*
 
 <div align="center">
 
+## 📈 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=leefufufufufu-rgb/aibti&type=Date)](https://star-history.com/#leefufufufufu-rgb/aibti&Date)
+
+---
+
 **Made with ☕ and 3AM curiosity.**
 
-[🌍 wengui.xyz/aibti](https://wengui.xyz/aibti) · [🖼 Portrait Gallery](https://wengui.xyz/aibti/portraits/) · [⭐ Star on GitHub](https://github.com/leefufufufufu-rgb/aibti)
+[🌍 Live Demo](https://leefufufufufu-rgb.github.io/aibti) · [🖼 Portrait Gallery](https://leefufufufufu-rgb.github.io/aibti/portraits/) · [⭐ Star on GitHub](https://github.com/leefufufufufu-rgb/aibti) · [🛠 Contribute](https://github.com/leefufufufufu-rgb/aibti/issues?q=is%3Aopen+label%3A%22good+first+issue%22)
 
 </div>
