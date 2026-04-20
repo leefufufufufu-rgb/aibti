@@ -1,421 +1,410 @@
 <!DOCTYPE html>
 <!--
-  AIBTI · Report Template v1.0
-  Claude's /aibti Skill replaces every {{PLACEHOLDER}} below with real data,
-  then writes the result to ~/.aibti/report.html (overwriting the previous one).
-  Fully self-contained · no external scripts · no network required.
+  AIBTI · Report Template v0.3.0 · Narrative Edition
+  ====================================================
+  Claude's /aibti Skill replaces every {{PLACEHOLDER}} with real data,
+  picks a tone that matches the user's prompt history, and writes the
+  result to ~/.aibti/report.html (overwriting the previous one).
+
+  All static text uses {{T_*}} i18n placeholders — Skill fills them
+  with the user's detected language.
+
+  Fully self-contained · no external scripts · no network.
 -->
 <html lang="{{LANG}}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIBTI · {{MAIN_NAME_ZH}} · {{MAIN_CODE}}</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>AIBTI · {{MAIN_NAME}} · {{MAIN_CODE}}</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0a0a0f; --bg-card: #181822; --border: #252534;
+    --bg: #0a0a0f; --bg-card: #13131a; --bg-soft: #181822;
+    --border: #252534; --border-hot: var(--group);
     --text: #e8e8f0; --text-dim: #8888a0; --text-faint: #55556a;
-    --accent: #00ff88; --accent-2: #a855f7; --accent-3: #fbbf24;
-    --danger: #ff4d6d; --blue: #60a5fa;
-    --group: {{GROUP_COLOR}};  /* 主人格阵营色 */
+    --accent: #00ff88; --accent-2: #a855f7; --accent-3: #fbbf24; --blue: #60a5fa;
+    --group: {{GROUP_COLOR}};
+    --group-rgb: {{GROUP_RGB}};
   }
   html, body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', system-ui, sans-serif; }
-  body { min-height: 100vh; padding: 40px 24px 80px; overflow-x: hidden;
+  body { min-height: 100vh; padding: 32px 24px 96px; overflow-x: hidden;
     background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(168,85,247,0.12), transparent 50%),
-      radial-gradient(ellipse at 80% 30%, rgba(0,255,136,0.08), transparent 50%),
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px); }
+      radial-gradient(ellipse at 10% 0%, rgba(var(--group-rgb),0.15), transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(168,85,247,0.1), transparent 60%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px); }
   code, .mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; }
-  .container { max-width: 1100px; margin: 0 auto; position: relative; }
+  .serif { font-family: 'Noto Serif SC', Georgia, serif; }
+  .container { max-width: 960px; margin: 0 auto; position: relative; }
+
+  /* SVG icon system */
+  .icon { width: 18px; height: 18px; display: inline-block; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-lg { width: 28px; height: 28px; }
 
   /* Header */
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: 1px; }
+  header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
   .logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-faint); text-align: right; line-height: 1.6; }
+  .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); text-align: right; line-height: 1.6; letter-spacing: 0.5px; }
+
+  /* Legendary banner */
+  .legendary-banner { padding: 14px 20px; margin-bottom: 24px; border-radius: 12px;
+    background: linear-gradient(90deg, rgba(168,85,247,0.18), rgba(251,191,36,0.12), rgba(168,85,247,0.18));
+    background-size: 200% 100%; animation: shimmer 4s ease-in-out infinite;
+    border: 1px solid rgba(251,191,36,0.5);
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  }
+  @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .legendary-banner .msg strong { background: linear-gradient(90deg, #fbbf24, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 2px; }
 
   /* Hero */
-  .hero { display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: center; margin-bottom: 50px; padding: 36px; background: linear-gradient(135deg, rgba(var(--group-rgb, 0,255,136),0.08), rgba(10,10,15,0.6)); border: 1px solid var(--group); border-radius: 20px; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 40%, rgba(var(--group-rgb, 0,255,136),0.15), transparent 60%); pointer-events: none; }
-  @media (max-width: 768px) { .hero { grid-template-columns: 1fr; text-align: center; } }
+  .hero { display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: center; margin-bottom: 48px; padding: 40px; background: linear-gradient(135deg, rgba(var(--group-rgb),0.1), rgba(10,10,15,0.6)); border: 1px solid var(--group); border-radius: 24px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 40%, rgba(var(--group-rgb),0.18), transparent 60%); pointer-events: none; }
+  @media (max-width: 768px) { .hero { grid-template-columns: 1fr; text-align: center; padding: 28px; } }
   .portrait { position: relative; z-index: 1; display: flex; justify-content: center; }
-  .portrait img { width: 100%; max-width: 260px; height: auto; filter: drop-shadow(0 0 40px rgba(var(--group-rgb, 0,255,136),0.4)); }
-  .info { position: relative; z-index: 1; }
-  .code-tag { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--group); letter-spacing: 4px; font-weight: 700; margin-bottom: 8px; }
-  .name { font-size: clamp(32px, 5vw, 52px); font-weight: 800; letter-spacing: -1.5px; line-height: 1; margin-bottom: 8px; }
-  .positive-label { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text-dim); margin-bottom: 16px; }
-  .slogan { font-size: 18px; color: var(--text-dim); font-style: italic; margin-bottom: 28px; padding: 12px 16px; border-left: 3px solid var(--group); background: rgba(0,0,0,0.2); border-radius: 0 8px 8px 0; }
+  .portrait img { width: 100%; max-width: 280px; height: auto; filter: drop-shadow(0 0 50px rgba(var(--group-rgb),0.4)); }
+  .hero-info { position: relative; z-index: 1; }
+  .code-tag { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--group); letter-spacing: 4px; font-weight: 700; margin-bottom: 10px; opacity: 0.9; }
+  .name { font-size: clamp(34px, 5.5vw, 56px); font-weight: 800; letter-spacing: -1.5px; line-height: 1; margin-bottom: 10px; }
+  .positive-label { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text-dim); margin-bottom: 20px; letter-spacing: 1px; }
+  .slogan { font-size: 19px; font-weight: 500; color: var(--text); font-style: italic; padding: 14px 20px; border-left: 3px solid var(--group); background: rgba(0,0,0,0.3); border-radius: 0 10px 10px 0; }
 
-  .power-row { display: flex; gap: 24px; margin-top: 20px; }
-  @media (max-width: 600px) { .power-row { flex-direction: column; gap: 16px; } }
-  .power-card { flex: 1; padding: 16px; border-radius: 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--border); }
-  .power-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
-  .power-card.super .power-title { color: var(--accent); }
-  .power-card.dark .power-title { color: var(--accent-3); }
-  .power-list { list-style: none; font-size: 14px; line-height: 1.6; }
-  .power-list li { padding: 4px 0; }
-  .power-list li::before { margin-right: 8px; }
-  .power-card.super .power-list li::before { content: '✦'; color: var(--accent); }
-  .power-card.dark .power-list li::before { content: '△'; color: var(--accent-3); }
+  .s-tier-crown { position: absolute; top: 20px; right: 20px; padding: 7px 18px; background: linear-gradient(90deg, #fbbf24, #a855f7); color: #000; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; letter-spacing: 2px; border-radius: 100px; box-shadow: 0 0 20px rgba(251,191,36,0.4); animation: crown 3s ease-in-out infinite; z-index: 2; }
+  @keyframes crown { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-  .template-box { margin-top: 20px; padding: 14px 16px; border-radius: 10px; background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.25); font-size: 13px; font-family: 'JetBrains Mono', monospace; color: var(--text); }
-  .template-box .tl { color: var(--accent-2); font-weight: 700; margin-bottom: 6px; font-size: 11px; letter-spacing: 2px; }
-  .template-box .before { color: var(--danger); opacity: 0.7; }
-  .template-box .after { color: var(--accent); }
+  /* Narrative sections — the soul of v0.3 */
+  .story-block { margin-bottom: 56px; padding: 0; }
+  .story-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 4px; color: var(--group); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .story-eyebrow .icon { color: var(--group); }
+  .story-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 700; letter-spacing: -0.8px; margin-bottom: 20px; line-height: 1.2; }
+  .story-body { font-size: 17px; line-height: 1.75; color: var(--text); max-width: 700px; }
+  .story-body p { margin-bottom: 14px; }
+  .story-body em { color: var(--group); font-style: normal; font-weight: 600; }
 
-  /* Section */
-  section { margin-bottom: 44px; }
-  .section-title { font-size: 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .section-title::before { content: '>'; }
-  .section-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 20px; }
+  /* The One Prompt — pull-quote style */
+  .pullquote-box { position: relative; padding: 48px 56px; margin: 32px 0; border-radius: 20px;
+    background: linear-gradient(135deg, rgba(var(--group-rgb),0.08), rgba(10,10,15,0.8));
+    border: 1px solid rgba(var(--group-rgb), 0.3); }
+  .pullquote-box::before, .pullquote-box::after { position: absolute; font-family: 'Noto Serif SC', Georgia, serif; font-size: 80px; color: var(--group); opacity: 0.3; line-height: 1; }
+  .pullquote-box::before { content: '"'; top: 12px; left: 20px; }
+  .pullquote-box::after { content: '"'; bottom: -20px; right: 20px; transform: rotate(180deg); }
+  .pullquote-text { font-family: 'Noto Serif SC', Georgia, serif; font-size: clamp(20px, 3vw, 30px); font-weight: 500; line-height: 1.5; color: var(--text); letter-spacing: -0.3px; }
+  .pullquote-meta { margin-top: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-faint); }
+  .pullquote-punchline { margin-top: 20px; font-size: 15px; color: var(--group); font-weight: 600; }
 
-  /* Dimensions (bar chart) */
-  .dim-list { display: flex; flex-direction: column; gap: 14px; }
-  .dim-row { display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; gap: 12px; }
-  .dim-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+  /* 4D with punchlines */
+  .dims { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+  .dim-group { display: flex; flex-direction: column; gap: 24px; }
+  .dim-row-wrap { padding-bottom: 16px; border-bottom: 1px dashed var(--border); }
+  .dim-row-wrap:last-child { border-bottom: none; padding-bottom: 0; }
+  .dim-row { display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .dim-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
   .dim-label.left { text-align: left; color: var(--accent); }
   .dim-label.right { text-align: right; color: var(--accent-2); }
-  .dim-bar { height: 24px; background: var(--bg-card); border-radius: 4px; position: relative; overflow: hidden; }
-  .dim-bar .fill-a { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), rgba(0,255,136,0.3)); border-radius: 4px 0 0 4px; transition: width 0.8s ease-out; }
-  .dim-bar .fill-b { position: absolute; right: 0; top: 0; bottom: 0; background: linear-gradient(-90deg, var(--accent-2), rgba(168,85,247,0.3)); border-radius: 0 4px 4px 0; transition: width 0.8s ease-out; }
+  .dim-bar { height: 22px; background: var(--bg); border-radius: 4px; position: relative; overflow: hidden; }
+  .dim-bar .fill-a { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), rgba(0,255,136,0.3)); border-radius: 4px 0 0 4px; transition: width 1s ease-out; }
+  .dim-bar .fill-b { position: absolute; right: 0; top: 0; bottom: 0; background: linear-gradient(-90deg, var(--accent-2), rgba(168,85,247,0.3)); border-radius: 0 4px 4px 0; transition: width 1s ease-out; }
   .dim-bar .pct-l, .dim-bar .pct-r { position: absolute; top: 50%; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff; font-weight: 700; }
-  .dim-bar .pct-l { left: 8px; }
-  .dim-bar .pct-r { right: 8px; }
-  .dim-cite { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-faint); margin-top: 6px; margin-left: 92px; }
+  .dim-bar .pct-l { left: 10px; }
+  .dim-bar .pct-r { right: 10px; }
+  .dim-punchline { margin-top: 8px; font-size: 14px; color: var(--text-dim); font-style: italic; padding-left: 92px; }
+  .dim-cite { margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-faint); padding-left: 92px; }
+  .dim-cite .cite-src { color: var(--group); font-weight: 600; }
 
-  /* 16-type TOP */
-  .top-list { display: flex; flex-direction: column; gap: 10px; }
-  .top-row { display: grid; grid-template-columns: 48px 80px 1fr 1fr 60px; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; transition: all 0.3s; }
-  .top-row:hover { border-color: var(--accent); }
-  .top-row.main { border-color: var(--group); background: linear-gradient(90deg, rgba(var(--group-rgb, 0,255,136),0.1), var(--bg-card)); }
-  .top-emoji img { width: 36px; height: 36px; }
-  .top-code { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
-  .top-name { font-size: 14px; font-weight: 600; }
-  .top-bar-wrap { height: 20px; background: var(--bg); border-radius: 3px; overflow: hidden; }
-  .top-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 3px; transition: width 0.8s; }
-  .top-pct { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-dim); text-align: right; }
+  /* 16 types — ranked rows */
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-row { display: grid; grid-template-columns: 36px 72px 1fr 1fr 48px; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; transition: all 0.3s; }
+  .rank-row:hover { border-color: var(--group); }
+  .rank-row.main { border-color: var(--group); background: linear-gradient(90deg, rgba(var(--group-rgb),0.12), var(--bg-card)); }
+  .rank-row img { width: 32px; height: 32px; }
+  .rank-code { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--group); }
+  .rank-name { font-size: 14px; font-weight: 600; }
+  .rank-bar-wrap { height: 16px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+  .rank-bar { height: 100%; background: linear-gradient(90deg, var(--group), rgba(var(--group-rgb),0.3)); border-radius: 3px; transition: width 1s; }
+  .rank-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-dim); text-align: right; }
 
-  /* Intent pie/bars */
-  .intent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-  .intent-card { padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; text-align: center; }
-  .intent-name { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
-  .intent-pct { font-size: 28px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--accent); letter-spacing: -1px; }
-  .intent-mini-bar { height: 3px; background: var(--bg); border-radius: 2px; overflow: hidden; margin-top: 8px; }
-  .intent-mini-fill { height: 100%; background: var(--accent); transition: width 0.8s; }
+  /* Growth Letter — new hero section */
+  .letter { padding: 48px; border-radius: 24px;
+    background: linear-gradient(135deg, rgba(var(--group-rgb),0.05), rgba(168,85,247,0.05));
+    border: 1px solid rgba(var(--group-rgb), 0.3);
+    font-family: 'Noto Serif SC', Georgia, serif;
+    line-height: 1.8; font-size: 17px;
+    position: relative; overflow: hidden;
+  }
+  .letter::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--group), var(--accent-2)); }
+  .letter .letter-header { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 4px; color: var(--group); margin-bottom: 20px; text-transform: uppercase; }
+  .letter .salutation { font-size: 22px; font-weight: 700; margin-bottom: 20px; color: var(--group); }
+  .letter .body p { margin-bottom: 14px; }
+  .letter .signature { margin-top: 28px; padding-top: 20px; border-top: 1px dashed rgba(var(--group-rgb), 0.3); font-style: italic; color: var(--text-dim); font-size: 14px; }
 
-  /* Evidence cards */
-  .evidence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-  .evidence-card { padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; position: relative; }
-  .evidence-card::before { content: '"'; position: absolute; top: -8px; left: 12px; font-size: 36px; color: var(--group); opacity: 0.4; font-family: Georgia; }
-  .evidence-text { font-size: 13px; line-height: 1.6; color: var(--text); padding-top: 8px; margin-bottom: 8px; }
-  .evidence-meta { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-faint); }
-
-  /* Diagnostics */
-  .diag-list { display: flex; flex-direction: column; gap: 12px; }
-  .diag-card { padding: 18px 20px; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-3); border-radius: 8px; }
-  .diag-lead { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-  .diag-evidence { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; font-style: italic; }
-  .diag-theory { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--accent-2); }
-
-  /* Badges · 分层视觉 */
+  /* Badges */
   .badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
   .badge-card { padding: 20px; border-radius: 14px; background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(10,10,15,0.5)); border: 1px solid rgba(251,191,36,0.35); position: relative; overflow: hidden; transition: transform 0.3s; }
   .badge-card:hover { transform: translateY(-3px); }
   .badge-card.tier-2 { background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(10,10,15,0.5)); border-color: rgba(0,255,136,0.5); }
   .badge-card.tier-3 { background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(10,10,15,0.5)); border-color: rgba(96,165,250,0.5); }
-
-  /* Tier 4 · LEGENDARY · 必须爆炸 */
   .badge-card.tier-4 {
     background: linear-gradient(135deg, rgba(168,85,247,0.25), rgba(251,191,36,0.12), rgba(168,85,247,0.25));
-    background-size: 200% 200%;
-    animation: legendary-shimmer 6s ease-in-out infinite;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    background-size: 200% 200%; animation: shimmer 6s ease-in-out infinite;
     box-shadow: 0 0 30px rgba(168,85,247,0.3), 0 0 60px rgba(251,191,36,0.15);
-    position: relative;
   }
-  .badge-card.tier-4::before {
-    content: ''; position: absolute; inset: -2px;
-    background: linear-gradient(135deg, #a855f7, #fbbf24, #00ff88, #a855f7);
-    background-size: 400% 400%;
-    animation: legendary-border 8s linear infinite;
-    border-radius: 14px; z-index: -1;
-  }
-  .badge-card.tier-4::after {
-    content: 'LEGENDARY'; position: absolute; top: 10px; right: 10px;
-    font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: 3px;
-    color: #fbbf24; font-weight: 700;
-    animation: legendary-pulse 2s ease-in-out infinite;
-  }
-  @keyframes legendary-shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-  @keyframes legendary-border { 0% { background-position: 0% 0%; } 100% { background-position: 400% 0%; } }
-  @keyframes legendary-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-  .badge-card.tier-4 .badge-icon { font-size: 40px; animation: legendary-float 3s ease-in-out infinite; }
-  @keyframes legendary-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  .badge-card.tier-4::before { content: 'LEGENDARY'; position: absolute; top: 10px; right: 12px; font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: 3px; color: #fbbf24; font-weight: 700; animation: pulse 2s infinite; }
+  .badge-card.tier-4 .badge-name { background: linear-gradient(90deg, #fbbf24, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .badge-card .badge-svg { width: 36px; height: 36px; margin-bottom: 10px; stroke: currentColor; fill: none; stroke-width: 1.8; color: var(--group); }
+  .badge-card.tier-4 .badge-svg { color: #fbbf24; }
+  .badge-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .badge-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .badge-rare { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 10px; font-family: 'JetBrains Mono', monospace; border-radius: 4px; letter-spacing: 2px; font-weight: 700; background: rgba(var(--group-rgb), 0.2); color: var(--group); }
+  .badge-card.tier-4 .badge-rare { background: linear-gradient(90deg, rgba(168,85,247,0.3), rgba(251,191,36,0.3)); color: #fff; }
 
-  .badge-icon { font-size: 32px; margin-bottom: 8px; display: inline-block; }
-  .badge-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-  .badge-card.tier-4 .badge-name { font-size: 18px; background: linear-gradient(90deg, #fbbf24, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .badge-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
-  .badge-rare { display: inline-block; margin-top: 10px; padding: 3px 10px; font-size: 10px; font-family: 'JetBrains Mono', monospace; border-radius: 4px; letter-spacing: 2px; font-weight: 700; }
-  .badge-card.tier-1 .badge-rare { background: rgba(251,191,36,0.2); color: var(--accent-3); }
-  .badge-card.tier-2 .badge-rare { background: rgba(0,255,136,0.2); color: var(--accent); }
-  .badge-card.tier-3 .badge-rare { background: rgba(96,165,250,0.2); color: var(--blue); }
-  .badge-card.tier-4 .badge-rare { background: linear-gradient(90deg, rgba(168,85,247,0.3), rgba(251,191,36,0.3)); color: #fff; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
-
-  /* S-tier main persona indicator */
-  .s-tier-crown { position: absolute; top: 16px; right: 16px; padding: 6px 14px; background: linear-gradient(90deg, #fbbf24, #a855f7); color: #000; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; letter-spacing: 2px; border-radius: 100px; box-shadow: 0 0 20px rgba(251,191,36,0.4); animation: crown-pulse 3s ease-in-out infinite; }
-  @keyframes crown-pulse { 0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(251,191,36,0.4); } 50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(251,191,36,0.6); } }
-
-  /* Legendary banner above Hero (when Tier 4 unlocked) */
-  .legendary-banner {
-    padding: 16px 24px; margin-bottom: 24px; border-radius: 12px;
-    background: linear-gradient(90deg, rgba(168,85,247,0.15), rgba(251,191,36,0.1), rgba(168,85,247,0.15));
-    background-size: 200% 100%;
-    animation: legendary-shimmer 4s ease-in-out infinite;
-    border: 1px solid rgba(251,191,36,0.5);
-    display: flex; align-items: center; gap: 16px;
-    font-family: 'JetBrains Mono', monospace; font-size: 13px;
-  }
-  .legendary-banner .star { font-size: 24px; animation: legendary-float 2s ease-in-out infinite; }
-  .legendary-banner .msg { flex: 1; }
-  .legendary-banner .msg strong { color: #fbbf24; font-weight: 700; letter-spacing: 2px; }
-
-  /* Secondary persona + stats */
-  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 768px) { .dual-grid { grid-template-columns: 1fr; } }
-  .mini-card { padding: 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; }
-  .mini-title { font-size: 12px; letter-spacing: 2px; color: var(--text-faint); text-transform: uppercase; margin-bottom: 14px; }
-  .secondary-row { display: flex; align-items: center; gap: 14px; }
-  .secondary-row img { width: 56px; height: 56px; }
-  .secondary-info .code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 2px; }
-  .secondary-info .name { font-size: 20px; font-weight: 700; margin: 2px 0; }
-  .secondary-info .pct { font-size: 13px; color: var(--text-dim); }
-  .stat-list { display: flex; flex-direction: column; gap: 10px; }
-  .stat-row { display: flex; justify-content: space-between; font-size: 13px; padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--text-dim); }
-  .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+  /* Stats strip */
+  .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; padding: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; }
+  .stat-item { text-align: center; }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 800; color: var(--group); letter-spacing: -0.5px; }
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
 
   /* Footer */
-  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--text-faint); font-size: 12px; font-family: 'JetBrains Mono', monospace; line-height: 1.8; }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--text-faint); font-size: 12px; font-family: 'JetBrains Mono', monospace; line-height: 1.8; }
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
-  /* Share button */
-  .share-btn { padding: 8px 16px; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-  .share-btn:hover { background: var(--accent); color: #000; }
-
   /* Scan line */
-  .scan { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; z-index: 99; animation: scan 8s linear infinite; pointer-events: none; }
+  .scan { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.4; z-index: 99; animation: scan 10s linear infinite; pointer-events: none; }
   @keyframes scan { 0% { transform: translateY(-10px); } 100% { transform: translateY(100vh); } }
 </style>
 </head>
 <body>
 <div class="scan"></div>
 
+<!-- Reusable SVG icon definitions -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3zM12 10v5M12 18v.5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M7 7c-2 0-3 2-3 4v4h4V9H6M17 7c-2 0-3 2-3 4v4h4V9h-2"/></symbol>
+    <symbol id="i-letter" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 7 9-7"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4v16h14V4H4zM4 4c0-1 1-2 2-2h12v16H6c-1 0-2 .5-2 2"/></symbol>
+    <symbol id="i-trending" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 13.5A9 9 0 1 1 10 3a7 7 0 0 0 10 10.5z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2s4 4 4 9a4 4 0 1 1-8 0c0-2 1-3 2-4C9 5 12 2 12 2z"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 18l2-10 4 5 3-8 3 8 4-5 2 10z"/><path d="M3 21h18"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+  </defs>
+</svg>
+
 <div class="container">
 
 <header>
-  <div class="logo"><span class="dot"></span>AIBTI · My Report</div>
+  <div class="logo"><span class="dot"></span>AIBTI</div>
   <div class="meta">
-    Generated: <span style="color:var(--accent)">{{REPORT_DATE}}</span><br>
-    Samples: {{SAMPLE_COUNT}} / last {{DAYS}} days · <span style="color:var(--accent-3)">{{CONFIDENCE}}</span>
+    {{REPORT_DATE}} · {{SAMPLE_COUNT}} prompts · {{CONFIDENCE}}
   </div>
 </header>
 
-<!-- Legendary banner (only show if Tier 4 badge unlocked) -->
+<!-- Legendary banner (only if Tier 4 unlocked) -->
 <div class="legendary-banner" style="display:{{LEGENDARY_DISPLAY}}">
-  <div class="star">✨</div>
+  <svg class="icon-lg" style="color:#fbbf24"><use href="#i-sparkle"/></svg>
   <div class="msg">
-    <strong>LEGENDARY UNLOCKED</strong> — {{LEGENDARY_NAME}}<br>
-    <span style="color:var(--text-dim)">{{LEGENDARY_DESC}} · rarity &lt; {{LEGENDARY_RARITY}}%</span>
+    <strong>{{T_LEGENDARY}}</strong> — {{LEGENDARY_NAME}}<br>
+    <span style="color:var(--text-dim)">{{LEGENDARY_DESC}}</span>
   </div>
-  <div class="star">✨</div>
+  <svg class="icon-lg" style="color:#a855f7"><use href="#i-sparkle"/></svg>
 </div>
 
-<!-- Hero: Main Persona -->
+<!-- Hero -->
 <div class="hero">
-  <!-- S-tier crown (only show if main persona ≥ 70%) -->
-  <div class="s-tier-crown" style="display:{{S_TIER_DISPLAY}}">⭐ S-TIER · {{S_TIER_LABEL}}</div>
-  <div class="portrait">
-    <img src="portraits/{{MAIN_CODE_LOWER}}.svg" alt="{{MAIN_NAME_ZH}}">
+  <div class="s-tier-crown" style="display:{{S_TIER_DISPLAY}}">
+    <svg class="icon" style="color:#000;stroke-width:2"><use href="#i-crown"/></svg>
+    {{T_S_TIER}} · {{S_TIER_LABEL}}
   </div>
-  <div class="info">
+  <div class="portrait">
+    <img src="portraits/{{MAIN_CODE_LOWER}}.svg" alt="{{MAIN_NAME}}">
+  </div>
+  <div class="hero-info">
     <div class="code-tag">{{MAIN_CODE}} · {{TRIBE_NAME}}</div>
-    <div class="name">{{MAIN_EMOJI}} {{MAIN_NAME_ZH}}</div>
-    <div class="positive-label">{{MAIN_NAME_POSITIVE}}</div>
+    <div class="name">{{MAIN_NAME}}</div>
+    <div class="positive-label">{{MAIN_POSITIVE_LABEL}}</div>
     <div class="slogan">"{{MAIN_SLOGAN}}"</div>
-
-    <div class="power-row">
-      <div class="power-card super">
-        <div class="power-title">💪 Superpowers</div>
-        <ul class="power-list">
-          {{SUPERPOWERS_LIST}}
-        </ul>
-      </div>
-      <div class="power-card dark">
-        <div class="power-title">⚠️ Growth Space</div>
-        <ul class="power-list">
-          <li>{{DARK_SIDE}}</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="template-box">
-      <div class="tl">🎯 PROMPT UPGRADE</div>
-      <div class="before">before: {{TEMPLATE_BEFORE}}</div>
-      <div class="after">after:  {{TEMPLATE_AFTER}}</div>
-    </div>
   </div>
 </div>
 
-<!-- Dimensions -->
-<section>
-  <div class="section-title">Four Dimensions · 四维画像</div>
-  <div class="dim-list">
-    <div>
-      <div class="dim-row">
-        <div class="dim-label left">A Abstract</div>
-        <div class="dim-bar">
-          <div class="fill-a" style="width:{{DIM_A_PCT}}%"></div>
-          <div class="fill-b" style="width:{{DIM_C_PCT}}%"></div>
-          <div class="pct-l">{{DIM_A_PCT}}%</div>
-          <div class="pct-r">{{DIM_C_PCT}}%</div>
+<!-- Narrative 1 · Opening Story -->
+<section class="story-block">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-book"/></svg>
+    {{T_OPENING}}
+  </div>
+  <h2 class="story-title">{{OPENING_HEADLINE}}</h2>
+  <div class="story-body">
+    {{OPENING_STORY_HTML}}
+  </div>
+</section>
+
+<!-- Narrative 2 · The One Prompt That Sums You Up -->
+<section class="story-block">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-quote"/></svg>
+    {{T_ONE_PROMPT}}
+  </div>
+  <div class="pullquote-box">
+    <div class="pullquote-text serif">{{ONE_PROMPT_TEXT}}</div>
+    <div class="pullquote-meta">— {{ONE_PROMPT_META}}</div>
+    <div class="pullquote-punchline">{{ONE_PROMPT_PUNCHLINE}}</div>
+  </div>
+</section>
+
+<!-- 4D with punchlines -->
+<section class="story-block">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-target"/></svg>
+    {{T_FOUR_DIMENSIONS}}
+  </div>
+  <div class="dims">
+    <div class="dim-group">
+      <div class="dim-row-wrap">
+        <div class="dim-row">
+          <div class="dim-label left">A · {{T_ABSTRACT}}</div>
+          <div class="dim-bar">
+            <div class="fill-a" style="width:{{DIM_A_PCT}}%"></div>
+            <div class="fill-b" style="width:{{DIM_C_PCT}}%"></div>
+            <div class="pct-l">{{DIM_A_PCT}}%</div>
+            <div class="pct-r">{{DIM_C_PCT}}%</div>
+          </div>
+          <div class="dim-label right">{{T_CONCRETE}} · C</div>
         </div>
-        <div class="dim-label right">C Concrete</div>
+        <div class="dim-punchline">{{DIM_AC_PUNCHLINE}}</div>
+        <div class="dim-cite"><span class="cite-src">→</span> {{DIM_AC_THEORY}}</div>
       </div>
-      <div class="dim-cite">{{DIM_AC_THEORY}}</div>
-    </div>
-    <div>
-      <div class="dim-row">
-        <div class="dim-label left">M Minimal</div>
-        <div class="dim-bar">
-          <div class="fill-a" style="width:{{DIM_M_PCT}}%"></div>
-          <div class="fill-b" style="width:{{DIM_V_PCT}}%"></div>
-          <div class="pct-l">{{DIM_M_PCT}}%</div>
-          <div class="pct-r">{{DIM_V_PCT}}%</div>
+      <div class="dim-row-wrap">
+        <div class="dim-row">
+          <div class="dim-label left">M · {{T_MINIMAL}}</div>
+          <div class="dim-bar">
+            <div class="fill-a" style="width:{{DIM_M_PCT}}%"></div>
+            <div class="fill-b" style="width:{{DIM_V_PCT}}%"></div>
+            <div class="pct-l">{{DIM_M_PCT}}%</div>
+            <div class="pct-r">{{DIM_V_PCT}}%</div>
+          </div>
+          <div class="dim-label right">{{T_VERBOSE}} · V</div>
         </div>
-        <div class="dim-label right">V Verbose</div>
+        <div class="dim-punchline">{{DIM_MV_PUNCHLINE}}</div>
+        <div class="dim-cite"><span class="cite-src">→</span> {{DIM_MV_THEORY}}</div>
       </div>
-      <div class="dim-cite">{{DIM_MV_THEORY}}</div>
-    </div>
-    <div>
-      <div class="dim-row">
-        <div class="dim-label left">D Directive</div>
-        <div class="dim-bar">
-          <div class="fill-a" style="width:{{DIM_D_PCT}}%"></div>
-          <div class="fill-b" style="width:{{DIM_L_PCT}}%"></div>
-          <div class="pct-l">{{DIM_D_PCT}}%</div>
-          <div class="pct-r">{{DIM_L_PCT}}%</div>
+      <div class="dim-row-wrap">
+        <div class="dim-row">
+          <div class="dim-label left">D · {{T_DIRECTIVE}}</div>
+          <div class="dim-bar">
+            <div class="fill-a" style="width:{{DIM_D_PCT}}%"></div>
+            <div class="fill-b" style="width:{{DIM_L_PCT}}%"></div>
+            <div class="pct-l">{{DIM_D_PCT}}%</div>
+            <div class="pct-r">{{DIM_L_PCT}}%</div>
+          </div>
+          <div class="dim-label right">{{T_COLLAB}} · L</div>
         </div>
-        <div class="dim-label right">L Collaborate</div>
+        <div class="dim-punchline">{{DIM_DL_PUNCHLINE}}</div>
+        <div class="dim-cite"><span class="cite-src">→</span> {{DIM_DL_THEORY}}</div>
       </div>
-      <div class="dim-cite">{{DIM_DL_THEORY}}</div>
-    </div>
-    <div>
-      <div class="dim-row">
-        <div class="dim-label left">X Explore</div>
-        <div class="dim-bar">
-          <div class="fill-a" style="width:{{DIM_X_PCT}}%"></div>
-          <div class="fill-b" style="width:{{DIM_E_PCT}}%"></div>
-          <div class="pct-l">{{DIM_X_PCT}}%</div>
-          <div class="pct-r">{{DIM_E_PCT}}%</div>
+      <div class="dim-row-wrap">
+        <div class="dim-row">
+          <div class="dim-label left">X · {{T_EXPLORE}}</div>
+          <div class="dim-bar">
+            <div class="fill-a" style="width:{{DIM_X_PCT}}%"></div>
+            <div class="fill-b" style="width:{{DIM_E_PCT}}%"></div>
+            <div class="pct-l">{{DIM_X_PCT}}%</div>
+            <div class="pct-r">{{DIM_E_PCT}}%</div>
+          </div>
+          <div class="dim-label right">{{T_EXECUTE}} · E</div>
         </div>
-        <div class="dim-label right">E Execute</div>
+        <div class="dim-punchline">{{DIM_XE_PUNCHLINE}}</div>
+        <div class="dim-cite"><span class="cite-src">→</span> {{DIM_XE_THEORY}}</div>
       </div>
-      <div class="dim-cite">{{DIM_XE_THEORY}}</div>
     </div>
   </div>
 </section>
 
-<!-- Intent distribution -->
-<section>
-  <div class="section-title">Intent Breakdown · 你都在做什么</div>
-  <div class="intent-grid">
-    {{INTENT_CARDS}}
+<!-- Stats strip -->
+<section class="story-block">
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-value">{{SAMPLE_COUNT}}</div>
+      <div class="stat-label">{{T_PROMPTS}}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{{PEAK_HOUR}}</div>
+      <div class="stat-label">{{T_PEAK_HOUR}}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{{MEDIAN_LEN}}</div>
+      <div class="stat-label">{{T_MEDIAN}}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{{NIGHT_RATIO}}%</div>
+      <div class="stat-label">{{T_NIGHT_RATIO}}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{{LONGEST_THREAD}}</div>
+      <div class="stat-label">{{T_LONGEST}}</div>
+    </div>
   </div>
 </section>
 
-<!-- 16-Type TOP -->
-<section>
-  <div class="section-title">16 Types Distribution · TOP 6</div>
-  <div class="top-list">
-    {{TOP6_ROWS}}
+<!-- 16 Types TOP 6 -->
+<section class="story-block">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-trending"/></svg>
+    {{T_RANK_TITLE}}
+  </div>
+  <div class="rank-list">
+    {{RANK_ROWS}}
   </div>
 </section>
 
-<!-- Evidence -->
-<section>
-  <div class="section-title">Real Evidence · 真实 Prompt 佐证</div>
-  <div class="section-desc">These are your actual words from the last {{DAYS}} days — not made up.</div>
-  <div class="evidence-grid">
-    {{EVIDENCE_CARDS}}
+<!-- Badges (only if any unlocked) -->
+<section class="story-block" style="display:{{BADGES_DISPLAY}}">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-sparkle"/></svg>
+    {{T_BADGES_TITLE}}
   </div>
-</section>
-
-<!-- Diagnostics -->
-<section>
-  <div class="section-title">Diagnostics · 每条挂大神理论</div>
-  <div class="diag-list">
-    {{DIAG_CARDS}}
-  </div>
-</section>
-
-<!-- Badges -->
-<section style="display:{{BADGES_DISPLAY}}">
-  <div class="section-title">🎉 Unlocked Badges · 解锁徽章</div>
   <div class="badges-grid">
     {{BADGE_CARDS}}
   </div>
 </section>
 
-<!-- Dual: Secondary + Stats -->
-<section>
-  <div class="dual-grid">
-    <div class="mini-card" style="display:{{SECONDARY_DISPLAY}}">
-      <div class="mini-title">Secondary Persona · 副人格</div>
-      <div class="secondary-row">
-        <img src="portraits/{{SECONDARY_CODE_LOWER}}.svg" alt="{{SECONDARY_NAME}}">
-        <div class="secondary-info">
-          <div class="code">{{SECONDARY_CODE}}</div>
-          <div class="name">{{SECONDARY_EMOJI}} {{SECONDARY_NAME}}</div>
-          <div class="pct">{{SECONDARY_PCT}}% · Appears in {{SECONDARY_CONTEXT}}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mini-card">
-      <div class="mini-title">Behavior Stats · 行为数据</div>
-      <div class="stat-list">
-        <div class="stat-row"><span class="stat-label">Peak hour</span><span class="stat-value">{{PEAK_HOUR}}</span></div>
-        <div class="stat-row"><span class="stat-label">Median length</span><span class="stat-value">{{MEDIAN_LEN}} chars</span></div>
-        <div class="stat-row"><span class="stat-label">Longest thread</span><span class="stat-value">{{LONGEST_THREAD}} turns</span></div>
-        <div class="stat-row"><span class="stat-label">Active projects</span><span class="stat-value">{{TOP_PROJECTS}}</span></div>
-        <div class="stat-row"><span class="stat-label">Late-night ratio</span><span class="stat-value">{{NIGHT_RATIO}}%</span></div>
-      </div>
-    </div>
+<!-- Narrative 3 · Growth Letter (the emotional close) -->
+<section class="story-block">
+  <div class="story-eyebrow">
+    <svg class="icon"><use href="#i-letter"/></svg>
+    {{T_LETTER_TITLE}}
+  </div>
+  <div class="letter">
+    <div class="letter-header">{{T_FROM_AI}}</div>
+    <div class="salutation">{{LETTER_SALUTATION}}</div>
+    <div class="body serif">{{LETTER_BODY_HTML}}</div>
+    <div class="signature">{{LETTER_SIGNATURE}}</div>
   </div>
 </section>
 
 <footer>
-  ◉ AIBTI v0.2.x · Generated at {{REPORT_DATE}} · 100% local, zero telemetry<br>
-  <a href="https://github.com/leefufufufufu-rgb/aibti">GitHub</a> · <a href="https://leefufufufufu-rgb.github.io/aibti/">Website</a> · <a href="https://github.com/leefufufufufu-rgb/aibti/blob/main/PRIVACY.md">Privacy</a><br>
-  <br>
-  <em>This report is yours. No one else sees it. Delete anytime: <code>rm ~/.aibti/report.html</code></em>
+  AIBTI v0.3.x · {{REPORT_DATE}} · {{T_LOCAL_ONLY}}<br>
+  <a href="https://github.com/leefufufufufu-rgb/aibti">GitHub</a> ·
+  <a href="https://leefufufufufu-rgb.github.io/aibti/">{{T_WEBSITE}}</a> ·
+  <a href="https://github.com/leefufufufufu-rgb/aibti/blob/main/PRIVACY.md">{{T_PRIVACY}}</a>
+  <br><br>
+  <em>{{T_FOOTER_NOTE}}</em>
 </footer>
 
 </div>
 
 <script>
-  // Simple entrance animation for bars
+  // Subtle entrance animations
   requestAnimationFrame(() => {
-    document.querySelectorAll('.fill-a, .fill-b, .top-bar, .intent-mini-fill').forEach((el, i) => {
+    document.querySelectorAll('.fill-a, .fill-b, .rank-bar').forEach((el, i) => {
       const target = el.style.width;
       el.style.width = '0%';
-      setTimeout(() => el.style.width = target, 100 + i * 30);
+      setTimeout(() => el.style.width = target, 150 + i * 40);
     });
   });
 </script>
