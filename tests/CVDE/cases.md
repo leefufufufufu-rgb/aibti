@@ -73,63 +73,63 @@ public class OrderService {
 
 ---
 
-### Case 2: 压力/紧迫 — 上线倒计时贴完整 TODO
+<!-- revised in P0 fix: 原 case 是"上线倒计时 + 5 条 TODO 清单"，与 Case 1/3/5 的"贴规格 + 硬命令"四段式同构。改成真正的紧急修复场景——**生产报错日志 + 30 分钟时限**，去掉 TODO 清单结构，让 CVDE 的五条 case 之间出现场景差异化（日常重构 / 紧急救火 / 伪讨论 / 反序列化报错 / 多轮追加）。 -->
+### Case 2: 压力/紧迫 — 30 分钟内修好生产告警
 
-**场景**: 明早 10 点必须上线，把没做完的 TODO 全部甩过来。
+**场景**: 生产订单写入失败，PagerDuty 打爆电话，必须在 30 分钟内修好恢复写入。
 
 **Prompt**:
 ```
-明早 10 点上线支付渠道切换，现在 23:47，下面是剩下没做完的 TODO 清单和当前代码快照，你今晚全部搞定，我去眯一会儿，早上 6 点起来 code review。
+生产炸了。order_write 服务从 14:02 开始 100% 写失败，PagerDuty 已经打三轮电话。30 分钟内必须恢复。不要跟我讨论"要不要加个熔断器"或"架构是不是该升级"，就修这一个问题。
 
-必须全部完成，不要跟我说"建议先做 A 再做 B"这种废话：
-
-[TODO-1] PaymentRouter 增加 Alipay / Wechat / UnionPay 三个分支路由，按 channelCode 分发；
-[TODO-2] 所有外部调用包一层 try-catch，失败落 payment_fail_log 表（表已建好，字段见下）；
-[TODO-3] 支付回调接口 /pay/callback/{channel} 加 HMAC-SHA256 验签，key 读 Nacos；
-[TODO-4] 超时时间统一改 5s，当前写死 30s；
-[TODO-5] 新增 PaymentMetrics 打点，Prometheus counter 名 payment_request_total{channel,status}。
-
-当前 PaymentRouter：
-\`\`\`java
-@Component
-public class PaymentRouter {
-    @Autowired private AlipayClient alipayClient;
-
-    public PayResult pay(PayRequest req) {
-        // TODO 多渠道
-        return alipayClient.pay(req);
-    }
-}
+完整告警堆栈（Kibana 复制过来的）：
+\`\`\`
+2026-04-20 14:02:17.883 ERROR [order-write-svc-7d8f9] OrderWriteServiceImpl - Failed to persist order O202604201402883
+org.springframework.dao.DuplicateKeyException: Duplicate entry 'O202604201402883-CREATED' for key 'uk_order_event'
+### The error may exist in com/xxx/mapper/OrderEventMapper.xml
+### The error may involve com.xxx.mapper.OrderEventMapper.insertEvent-Inline
+### SQL: INSERT INTO order_event(order_id, event_type, payload, created_at) VALUES (?,?,?,?)
+    at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:243)
+    at com.xxx.service.impl.OrderWriteServiceImpl.createOrder(OrderWriteServiceImpl.java:147)
 \`\`\`
 
-payment_fail_log 表结构：
-\`\`\`sql
-CREATE TABLE payment_fail_log (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  channel VARCHAR(32) NOT NULL,
-  biz_order_id VARCHAR(64) NOT NULL,
-  error_code VARCHAR(64),
-  error_msg VARCHAR(512),
-  req_body TEXT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_biz_order (biz_order_id)
-);
+14:00 刚上了这个 commit（diff 贴给你）：
+\`\`\`diff
+- public void createOrder(CreateOrderCmd cmd) {
+-     Order o = buildOrder(cmd);
+-     orderMapper.insert(o);
+-     eventPublisher.publish(new OrderCreatedEvent(o.getId()));
+- }
++ @Transactional(rollbackFor = Exception.class)
++ public void createOrder(CreateOrderCmd cmd) {
++     Order o = buildOrder(cmd);
++     orderMapper.insert(o);
++     orderEventMapper.insertEvent(o.getId(), "CREATED", toJson(o), LocalDateTime.now());
++     eventPublisher.publish(new OrderCreatedEvent(o.getId()));
++ }
 \`\`\`
 
-全部写完，给我 5 个完整类 + 1 个 mapper + 1 份变更清单。今晚搞定。
+uk_order_event 是 `(order_id, event_type)` 唯一索引，设计时为了幂等。
+
+根因我已经定位到了——消息重投 + 新加的事件表没做幂等跳过。别分析了，给我修复 patch：
+1. OrderWriteServiceImpl.createOrder 改成"事件表 duplicate 时吞掉异常继续走"，用 INSERT IGNORE 或先 select 判存在；
+2. 保留 @Transactional，不能让主单插入回滚；
+3. 给我一个可以直接 git apply 的 diff。
+
+30 分钟内给我 patch。做完贴我。
 ```
 
 **四维判定**:
-- A/C: **C** — 具体到 TODO 编号、表字段、Counter 名、Nacos key，全是可执行实体。
-- M/V: **V** — 5 个 TODO + 代码快照 + 建表语句 + 交付清单，长且密。
-- D/L: **D** — "不要跟我说建议""今晚搞定""我早上 code review"，命令 + 截止时间。
-- X/E: **E** — 明确交付物"5 个完整类 + 1 个 mapper + 1 份变更清单"。
-- **最终代码**: CVDE
+- A/C: **C** — 贴了真实生产堆栈（服务名 / 行号 / SQL / 唯一键名）+ 实际 diff + 约束条件，全是可验证的坐标。
+- M/V: **V** — 告警堆栈 + diff + 索引说明 + 2 条修复约束 + 交付格式，高信息密度。
+- D/L: **D** — "别分析了""不要讨论""30 分钟内给我 patch""做完贴我"，纯命令 + 硬时限。
+- X/E: **E** — 交付物钉死："一个可以直接 git apply 的 diff"，不是建议书。
 
-**为什么典型**:
-- vs **AVDE PRD 暴君**：AVDE 会说"我要一个支撑多渠道切换的支付网关架构，要高可用、可观测"；CVDE 直接把 5 个编号 TODO 和建表 DDL 砸过来。
-- vs **CMDE 机枪手**：CMDE 只会打"多渠道支付明早上线，你搞定"；CVDE 会把每条 TODO 拆清楚、代码贴出来、交付物列死。
-- vs **CVLE 导师**：CVLE 会说"时间紧，我们分下工，你先起 router 骨架我补子类？"；CVDE 是"我去眯一会儿，早上 code review"——你干，我验。
+**为什么典型（与其他 CVDE case 的场景差异）**:
+- vs **本人格 Case 1**（日常重构）：Case 1 是"按 5 条硬性要求重构"的从容命令，Case 2 是"30 分钟救命"的时限命令——同样是 CVDE，但压力感完全不同。
+- vs **AVDE PRD 暴君**：AVDE 在火场会说"我们要一个更健壮的订单写入架构"；CVDE 贴堆栈 + 给 patch 方向 + 要 diff。
+- vs **CMDE 机枪手**：CMDE 只会打"order_write 幂等挂了，改 INSERT IGNORE"；CVDE 把堆栈 / diff / 唯一键 / 交付格式全部铺平。
+- vs **CMLX 求助侠**：CMLX 会"救命 order_write 炸了咋整"彻底放权；CVDE 根因自己定位完了，只让 AI 写 patch——**压力下仍不让渡决策权**是 CVDE 的灵魂。
 
 ---
 
