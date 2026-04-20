@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="120" cy="155" r="135" stroke-dasharray="2 8" opacity="0.15"/>
+  <circle cx="120" cy="155" r="108" stroke-dasharray="1 6" opacity="0.25"/>
+
+  <!-- 右边希腊柱 -->
+  <path d="M170 30 L215 30 L215 35 L170 35 Z"/>
+  <path d="M175 35 L175 280 M185 35 L185 280 M195 35 L195 280 M205 35 L205 280" opacity="0.6"/>
+  <path d="M168 280 L217 280"/>
+  <path d="M165 287 L220 287"/>
+  <path d="M172 38 L208 38" opacity="0.4"/>
+
+  <!-- 头发（卷发学者） -->
+  <path d="M90 52 Q88 35 102 32 Q115 28 128 30 Q143 32 146 50"/>
+  <circle cx="95" cy="40" r="3" opacity="0.5"/>
+  <circle cx="140" cy="38" r="3" opacity="0.5"/>
+  <circle cx="105" cy="32" r="2.5" opacity="0.5"/>
+  <circle cx="128" cy="30" r="2.5" opacity="0.5"/>
+
+  <!-- 头 -->
+  <ellipse cx="115" cy="68" rx="22" ry="25"/>
+
+  <!-- 眉毛（好奇） -->
+  <path d="M103 58 L111 58"/>
+  <path d="M119 58 L127 58"/>
+
+  <!-- 眼睛（专注） -->
+  <circle cx="107" cy="64" r="1.3" fill="#60a5fa"/>
+  <circle cx="123" cy="64" r="1.3" fill="#60a5fa"/>
+
+  <!-- 胡子（哲学家式） -->
+  <path d="M104 80 Q115 84 126 80"/>
+  <path d="M115 85 L115 92"/>
+  <path d="M110 88 Q115 92 120 88" opacity="0.6"/>
+
+  <!-- 张嘴发问 -->
+  <path d="M111 88 Q115 90 119 88"/>
+
+  <!-- 脖 -->
+  <path d="M109 92 L109 100 M121 92 L121 100"/>
+
+  <!-- 长袍领 -->
+  <path d="M80 108 Q115 100 150 108"/>
+
+  <!-- 左手举起发问（指天） -->
+  <path d="M150 115 L160 70"/>
+  <circle cx="161" cy="68" r="3"/>
+  <!-- 食指尖 -->
+  <path d="M163 66 L167 60" opacity="0.8"/>
+
+  <!-- 右手拿卷轴 -->
+  <path d="M80 115 Q65 140 75 165"/>
+  <rect x="62" y="160" width="24" height="32" rx="1"/>
+  <!-- 卷轴文字 -->
+  <path d="M67 168 L81 168 M67 174 L81 174 M67 180 L81 180 M67 186 L78 186" opacity="0.5"/>
+  <!-- 卷轴两端 -->
+  <circle cx="62" cy="160" r="2"/>
+  <circle cx="86" cy="160" r="2"/>
+
+  <!-- 长袍身 -->
+  <path d="M80 108 Q68 180 75 270"/>
+  <path d="M150 108 Q162 180 155 270"/>
+
+  <!-- 袍褶 -->
+  <path d="M80 160 Q115 170 150 160" opacity="0.3"/>
+  <path d="M78 210 Q115 220 152 210" opacity="0.3"/>
+  <path d="M76 250 Q115 260 154 250" opacity="0.3"/>
+
+  <!-- 下摆 -->
+  <path d="M75 270 Q115 285 155 270"/>
+
+  <!-- 问号符号 -->
+  <text x="35" y="85" font-size="20" font-weight="700" stroke="none" fill="#60a5fa" opacity="0.6">?</text>
+  <text x="55" y="130" font-size="14" stroke="none" fill="#60a5fa" opacity="0.5">?</text>
+  <text x="48" y="170" font-size="10" stroke="none" fill="#60a5fa" opacity="0.4">?</text>
+
+  <text x="120" y="312" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#60a5fa" stroke="none" letter-spacing="2">CVLX · 苏格拉底码农</text>
+</svg>
