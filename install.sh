@@ -2,12 +2,9 @@
 # AIBTI · One-line installer (v0.2.x)
 # Usage: curl -sL https://raw.githubusercontent.com/leefufufufufu-rgb/aibti/main/install.sh | bash
 #
-# What it does:
-#   1. Downloads the AIBTI Skill to ~/.claude/skills/aibti/
-#   2. Downloads report template + 16 portrait SVGs to ~/.aibti/
-#   3. (Optional) Installs the Node.js hook for future prompts
-#
-# Zero new runtime dependencies — Claude Code already ships Node.js.
+# Installs ONLY the pure personality test — zero background processes.
+# AIBTI will execute ONLY when you explicitly say "Analyze my AIBTI" in Claude Code.
+# Your normal development workflow is 100% unchanged.
 
 set -e
 
@@ -17,7 +14,7 @@ SKILL_DIR="$HOME/.claude/skills/aibti"
 DATA_DIR="$HOME/.aibti"
 
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BLUE}  AIBTI Installer${NC} · Your AI Conversation Personality"
+echo -e "${BLUE}  AIBTI Installer${NC} · Pure personality test, zero friction"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 if [ ! -d "$HOME/.claude" ]; then
@@ -26,62 +23,46 @@ if [ ! -d "$HOME/.claude" ]; then
 fi
 
 # 1. Skill
-echo -e "${YELLOW}[1/3] Installing Skill to ${SKILL_DIR}...${NC}"
+echo -e "${YELLOW}[1/2] Installing Skill to ${SKILL_DIR}...${NC}"
 mkdir -p "$SKILL_DIR"
 curl -sfL "$RAW/skills/aibti/SKILL.md" -o "$SKILL_DIR/SKILL.md"
-echo -e "${GREEN}  ✓ Skill installed${NC}"
+echo -e "${GREEN}  ✓ Skill installed (runs ONLY when you ask)${NC}"
 
-# 2. Report template + 16 portrait SVGs
-echo -e "${YELLOW}[2/3] Installing report assets to ${DATA_DIR}...${NC}"
+# 2. Report template + 16 portrait SVGs (for beautiful HTML report)
+echo -e "${YELLOW}[2/2] Installing report assets to ${DATA_DIR}...${NC}"
 mkdir -p "$DATA_DIR/portraits"
 chmod 700 "$DATA_DIR" 2>/dev/null || true
 
 curl -sfL "$RAW/report-template.html" -o "$DATA_DIR/report-template.html"
-echo -e "${GREEN}  ✓ Report template${NC}"
-
+printf "  "
 PORTRAITS=(amde amdx amle amlx avde avdx avle avlx cmde cmdx cmle cmlx cvde cvdx cvle cvlx)
 for code in "${PORTRAITS[@]}"; do
     curl -sfL "$RAW/portraits/${code}.svg" -o "$DATA_DIR/portraits/${code}.svg"
     printf "."
 done
-echo -e "\n${GREEN}  ✓ 16 portrait SVGs installed${NC}"
-
-# 3. Optional hook (Node.js — already shipped with Claude Code)
-echo ""
-echo -e "${YELLOW}[3/3] Optional — install Node.js hook to record future prompts?${NC}"
-echo "   Without it: AIBTI still works (reads existing ~/.claude/projects/)."
-echo "   With it:    Future prompts unified to ~/.aibti/prompts.jsonl (with redaction)."
-echo ""
-read -p "   Install hook? [y/N]: " -r install_hook < /dev/tty || install_hook="n"
-
-if [[ "$install_hook" =~ ^[Yy]$ ]]; then
-    curl -sfL "$RAW/hooks/record.js" -o "$DATA_DIR/record.js"
-    echo -e "${GREEN}  ✓ Hook script installed at $DATA_DIR/record.js${NC}"
-    echo ""
-    echo -e "${YELLOW}  Add this to ~/.claude/settings.json (under 'hooks'):${NC}"
-    cat <<EOF
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [{"type":"command","command":"node $DATA_DIR/record.js","timeout":2}]
-      }
-    ]
-EOF
-else
-    echo -e "${BLUE}  (skipped — re-run this installer anytime)${NC}"
-fi
+echo -e "\n${GREEN}  ✓ Report template + 16 portrait SVGs installed${NC}"
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}  ✓ AIBTI installed.${NC}"
+echo -e "${GREEN}  ✓ AIBTI installed. Zero background processes.${NC}"
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-echo -e "${BLUE}Next:${NC} Open Claude Code, say:"
-echo -e "   ${GREEN}Analyze my AIBTI${NC}   or   ${GREEN}测一下我的 AIBTI${NC}"
+echo -e "${BLUE}How it works:${NC}"
+echo "  · AIBTI is 100% passive — runs only when you ask"
+echo "  · Your normal Claude Code workflow is untouched"
+echo "  · Each scan reads existing ~/.claude/projects/ (no new files watched)"
+echo ""
+echo -e "${BLUE}To get your report, open Claude Code and say:${NC}"
+echo -e "   ${GREEN}Analyze my AIBTI${NC}     or     ${GREEN}测一下我的 AIBTI${NC}"
 echo ""
 echo -e "${BLUE}You'll get:${NC}"
-echo "   · A rich terminal report"
-echo "   · A beautiful HTML report at ${GREEN}~/.aibti/report.html${NC} (open it in any browser)"
+echo "  · A terminal report (diagnostics with AI-research citations)"
+echo "  · A rich HTML report at ${GREEN}~/.aibti/report.html${NC}"
 echo ""
-echo -e "${BLUE}Privacy:${NC} 100% local — see $RAW/PRIVACY.md"
+echo -e "${YELLOW}Advanced (optional · most users don't need this):${NC}"
+echo "  For a unified prompt log across Claude Code / Cursor / Codex / Copilot,"
+echo "  you can install a lightweight hook that runs ~100ms per prompt:"
+echo -e "     ${BLUE}curl -sL $RAW/install-hook.sh | bash${NC}"
+echo ""
+echo -e "${BLUE}Privacy:${NC} 100% local · see $RAW/PRIVACY.md"
 echo -e "${BLUE}Uninstall:${NC} rm -rf $SKILL_DIR $DATA_DIR"
