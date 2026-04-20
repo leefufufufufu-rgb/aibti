@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none" stroke="#00ff88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="120" cy="155" r="135" stroke-dasharray="2 8" opacity="0.15"/>
+  <circle cx="120" cy="155" r="108" stroke-dasharray="1 6" opacity="0.25"/>
+
+  <!-- 左边小人 -->
+  <!-- 头发 -->
+  <path d="M50 55 Q48 40 62 38 Q75 36 82 44"/>
+  <!-- 头 -->
+  <ellipse cx="70" cy="65" rx="18" ry="20"/>
+  <!-- 眼 -->
+  <circle cx="64" cy="62" r="1" fill="#00ff88"/>
+  <circle cx="76" cy="62" r="1" fill="#00ff88"/>
+  <!-- 微笑 -->
+  <path d="M64 75 Q70 80 76 75"/>
+  <!-- 脖 -->
+  <path d="M65 84 L65 93 M75 84 L75 93"/>
+  <!-- T恤 -->
+  <path d="M45 100 Q75 92 105 100"/>
+  <path d="M45 100 L35 260"/>
+  <path d="M105 100 L115 260"/>
+
+  <!-- 右边小人 -->
+  <!-- 头发 -->
+  <path d="M158 55 Q156 38 170 36 Q185 38 190 52"/>
+  <!-- 头 -->
+  <ellipse cx="170" cy="65" rx="18" ry="20"/>
+  <!-- 眼 -->
+  <circle cx="164" cy="62" r="1" fill="#00ff88"/>
+  <circle cx="176" cy="62" r="1" fill="#00ff88"/>
+  <!-- 微笑 -->
+  <path d="M164 75 Q170 80 176 75"/>
+  <!-- 脖 -->
+  <path d="M165 84 L165 93 M175 84 L175 93"/>
+  <!-- T恤 -->
+  <path d="M135 100 Q170 92 205 100"/>
+  <path d="M205 100 L215 260"/>
+  <path d="M135 100 L125 260"/>
+
+  <!-- 中间握手 -->
+  <path d="M90 130 L150 130"/>
+  <path d="M105 128 Q120 125 135 128"/>
+  <!-- 握手的手（两个拳头交汇） -->
+  <ellipse cx="120" cy="132" rx="12" ry="6"/>
+  <path d="M112 130 L108 134" opacity="0.6"/>
+  <path d="M128 130 L132 134" opacity="0.6"/>
+
+  <!-- 共享笔记本（两人中间下方） -->
+  <rect x="92" y="155" width="56" height="40" rx="2"/>
+  <path d="M100 165 L140 165" opacity="0.5"/>
+  <path d="M100 172 L140 172" opacity="0.5"/>
+  <path d="M100 179 L140 179" opacity="0.5"/>
+  <path d="M100 186 L128 186" opacity="0.5"/>
+
+  <!-- 两人的内侧手指向笔记本 -->
+  <path d="M95 150 L98 158" opacity="0.6"/>
+  <path d="M145 150 L142 158" opacity="0.6"/>
+
+  <!-- 腰部 -->
+  <path d="M35 225 L115 225" opacity="0.5"/>
+  <path d="M125 225 L215 225" opacity="0.5"/>
+
+  <!-- 腿 -->
+  <path d="M50 260 L48 295 M90 260 L92 295"/>
+  <path d="M150 260 L148 295 M190 260 L192 295"/>
+
+  <!-- 脚 -->
+  <ellipse cx="48" cy="298" rx="7" ry="2"/>
+  <ellipse cx="92" cy="298" rx="7" ry="2"/>
+  <ellipse cx="148" cy="298" rx="7" ry="2"/>
+  <ellipse cx="192" cy="298" rx="7" ry="2"/>
+
+  <!-- 协作符号 -->
+  <text x="118" y="45" font-size="16" stroke="none" fill="#00ff88" opacity="0.6">💬</text>
+
+  <text x="120" y="313" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#00ff88" stroke="none" letter-spacing="2">CMLE · 结对搭子</text>
+</svg>
