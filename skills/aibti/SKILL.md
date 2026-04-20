@@ -97,24 +97,24 @@ description: 用 LLM 语义理解分析本地 Claude Code / Cursor / Codex / Cop
 #### A/C — Specificity（明确度）
 - **A 抽象**：概念层讨论，没指向具体代码位置或产物规格。讨论/创造/战略大多是 A
 - **C 具象**：含具体文件/行号/函数/具体产物描述
-- 👉 *依据：Anthropic《Be Clear, Direct & Detailed》· OpenAI Strategy 1 · Karpathy "specificity compounds"*
+- 👉 *依据：Anthropic《Be Clear & Direct》· **Karpathy 2024《Software 3.0》** · **Anthropic 2025《Claude Code Best Practices》** · 完整理论链见 [THEORY.md](../../THEORY.md)*
 
 #### M/V — Context Provision（上下文丰度）
 - **M 精简**：< 60 字，无代码块，用户假设 AI 能从对话记忆里拿上下文
 - **V 详尽**：> 200 字 或含代码块 / 需求规格 / 多步骤说明
-- 👉 *依据：Anthropic《Multishot Prompting》· OpenAI Strategy 2 · Brown 2020《GPT-3 Few-Shot》*
+- 👉 *依据：Brown 2020《GPT-3 Few-Shot》· **Liu 2023《Lost in the Middle》** · **Anthropic 2025《Effective Context Engineering》***
 
 #### D/L — Interaction Mode（交互模式）
 - **D 指令**：祈使句让 AI 执行 + 不留商量余地
 - **L 协作**：疑问句 / 征求意见 / 讨论语气 / 开放式 / "你觉得..."
 - 👉 **关键**：讨论类、创造类、战略类大多数时候是 L（用户在和 AI 对话，不是单向命令）
-- 👉 *依据：Karpathy "LLM is a junior collaborator, not oracle" · Yao 2022《ReAct》*
+- 👉 *依据：Yao 2022《ReAct》· **Anthropic 2024.12《Building Effective Agents》** · **MCP 2024 · Model Context Protocol***
 
 #### X/E — Decomposition & Verification（探索 vs 执行）
 - **X 探索**：问方案、比较选项、讨论可能性、提出疑问（"可行吗？"、"有没有更好的方式？"）
 - **E 执行**：直接要结果，不探索选项
 - 👉 **关键**：讨论类、创造类大部分是 X；纯指令类大部分是 E
-- 👉 *依据：Wei 2022《Chain-of-Thought》· Yao 2023《Tree of Thoughts》· OpenAI Strategy 3*
+- 👉 *依据：Wei 2022《Chain-of-Thought》· **OpenAI 2024.09《o1 System Card》** · **DeepSeek 2025《R1》** · **Anthropic 2025《Extended Thinking》***
 
 ### 4. 聚合与主人格
 
