@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="120" cy="155" r="135" stroke-dasharray="2 8" opacity="0.15"/>
+  <circle cx="120" cy="155" r="108" stroke-dasharray="1 6" opacity="0.25"/>
+
+  <!-- 三选一气泡 -->
+  <ellipse cx="45" cy="40" rx="15" ry="10" opacity="0.6"/>
+  <text x="45" y="43" font-size="10" text-anchor="middle" stroke="none" fill="#fbbf24">A?</text>
+  <ellipse cx="180" cy="35" rx="15" ry="10" opacity="0.6"/>
+  <text x="180" y="38" font-size="10" text-anchor="middle" stroke="none" fill="#fbbf24">B?</text>
+  <ellipse cx="205" cy="70" rx="15" ry="10" opacity="0.6"/>
+  <text x="205" y="73" font-size="10" text-anchor="middle" stroke="none" fill="#fbbf24">C?</text>
+
+  <!-- 头发（中分） -->
+  <path d="M98 50 Q95 35 110 32 L120 30 L130 32 Q146 35 142 50"/>
+  <path d="M120 32 L120 50" opacity="0.5"/>
+
+  <!-- 头 -->
+  <ellipse cx="120" cy="68" rx="22" ry="25"/>
+
+  <!-- 眼镜（细框） -->
+  <ellipse cx="112" cy="64" rx="5" ry="3"/>
+  <ellipse cx="128" cy="64" rx="5" ry="3"/>
+  <path d="M117 64 L123 64"/>
+
+  <!-- 疑惑表情 -->
+  <path d="M114 82 Q120 85 126 82"/>
+  <path d="M116 84 L124 84" opacity="0.4"/>
+
+  <!-- 脖 -->
+  <path d="M114 91 L114 100 M126 91 L126 100"/>
+
+  <!-- 衬衣领 -->
+  <path d="M88 110 Q120 102 152 110"/>
+  <path d="M108 110 L120 120 L132 110"/>
+
+  <!-- 身体（毛衣） -->
+  <path d="M88 110 L80 270"/>
+  <path d="M152 110 L160 270"/>
+
+  <!-- 毛衣花纹 -->
+  <path d="M90 150 L150 150" opacity="0.3"/>
+  <path d="M88 200 L152 200" opacity="0.3"/>
+
+  <!-- 抱着大笔记本 -->
+  <rect x="70" y="155" width="100" height="70" rx="2"/>
+  <path d="M120 155 L120 225" opacity="0.5"/>
+  <!-- 笔记线 -->
+  <path d="M78 170 L110 170" opacity="0.5"/>
+  <path d="M78 180 L110 180" opacity="0.5"/>
+  <path d="M78 190 L110 190" opacity="0.5"/>
+  <path d="M130 170 L162 170" opacity="0.5"/>
+  <path d="M130 180 L162 180" opacity="0.5"/>
+  <!-- 涂鸦箭头 -->
+  <path d="M135 200 L155 210 L150 205 M155 210 L155 205" opacity="0.7"/>
+
+  <!-- 抱本子的双手 -->
+  <path d="M88 160 Q65 180 70 210"/>
+  <path d="M152 160 Q175 180 170 210"/>
+  <circle cx="70" cy="215" r="3" opacity="0.7"/>
+  <circle cx="170" cy="215" r="3" opacity="0.7"/>
+
+  <!-- 笔（插在本子上） -->
+  <path d="M155 155 L170 145" stroke-width="2"/>
+  <circle cx="171" cy="144" r="1" fill="#fbbf24"/>
+
+  <!-- 腿 -->
+  <path d="M95 275 L92 300 M145 275 L148 300"/>
+
+  <text x="120" y="313" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#fbbf24" stroke="none" letter-spacing="2">AVLX · 小作文 PM</text>
+</svg>
