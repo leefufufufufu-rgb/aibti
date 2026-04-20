@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIBTI · 你的 AI 对话人格</title>
+<script>
+  // 语言自动路由：非中文浏览器默认跳英文版
+  // 用户在 navbar 点过"EN"/"中"切换后 localStorage 记忆，不再自动跳
+  (function() {
+    try {
+      var manual = localStorage.getItem('aibti-lang');
+      if (manual === 'zh') return;
+      if (manual === 'en') { location.replace('index.en.html'); return; }
+      var lang = (navigator.language || 'en').toLowerCase();
+      if (!lang.startsWith('zh')) location.replace('index.en.html');
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -296,7 +309,7 @@
       <a href="#philosophy">理念</a>
     </div>
     <div class="nav-right">
-      <a href="index.en.html" class="lang-btn">EN</a>
+      <a href="index.en.html" class="lang-btn" onclick="localStorage.setItem('aibti-lang','en')">EN</a>
       <a href="https://github.com/leefufufufufu-rgb/aibti" target="_blank" rel="noopener" class="gh-btn">★ Star</a>
     </div>
   </div>
@@ -304,7 +317,7 @@
 
 <section class="hero">
   <div class="container">
-    <div class="hero-tag"><span class="dot"></span>v0.1.0 · EXPERIMENTAL · 有点意思</div>
+    <div class="hero-tag"><span class="dot"></span>v0.2.0 · 100% LOCAL · 挂大神理论</div>
     <h1>你的 <span class="accent">AI 对话</span><br>人格测试</h1>
     <p class="hero-sub">
       你以为你在调教 AI，<span class="hl">其实 AI 在看透你</span>。<br>
