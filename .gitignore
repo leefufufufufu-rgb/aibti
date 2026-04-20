@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+*.log
+.env
+.env.local
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+/tmp/
+
+# Claude Code 本地工作记录（不入仓库）
+.claude/settings.local.json
+.claude/projects/
+.claude/todos/
+
+# 本地临时/个人数据（不该开源）
+~/.aibti/
+
