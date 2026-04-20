@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="120" cy="155" r="135" stroke-dasharray="2 8" opacity="0.15"/>
+  <circle cx="120" cy="155" r="108" stroke-dasharray="1 6" opacity="0.25"/>
+
+  <!-- 巨大月亮在右上 -->
+  <path d="M215 45 a35 35 0 1 1 -28 -42 a26 26 0 0 0 28 42z" opacity="0.9"/>
+  <circle cx="195" cy="25" r="1" fill="#a855f7" opacity="0.6"/>
+  <circle cx="205" cy="35" r="0.8" fill="#a855f7" opacity="0.5"/>
+
+  <!-- 星点 -->
+  <circle cx="40" cy="30" r="1.5" fill="#a855f7" opacity="0.6"/>
+  <circle cx="50" cy="55" r="1" fill="#a855f7" opacity="0.5"/>
+  <path d="M30 70 L31 66 L33 69 L37 70 L33 72 L31 75 L30 72 L26 70 Z" opacity="0.5"/>
+
+  <!-- 思考泡泡（从头飘到月亮） -->
+  <circle cx="145" cy="50" r="1" fill="#a855f7" opacity="0.5"/>
+  <circle cx="155" cy="40" r="1.5" fill="#a855f7" opacity="0.5"/>
+  <circle cx="165" cy="30" r="2" fill="#a855f7" opacity="0.5"/>
+
+  <!-- 头发（凌乱晚睡） -->
+  <path d="M85 55 Q82 40 92 35 Q103 30 115 32 Q128 28 140 36 Q148 40 148 55"/>
+  <path d="M100 40 Q102 36 105 37" opacity="0.6"/>
+
+  <!-- 头（微微下垂） -->
+  <ellipse cx="115" cy="70" rx="22" ry="25"/>
+
+  <!-- 眼睛（低垂，沉思） -->
+  <path d="M105 65 L109 65"/>
+  <path d="M121 65 L125 65"/>
+
+  <!-- 黑眼圈 -->
+  <path d="M103 70 Q107 73 111 70" opacity="0.4"/>
+  <path d="M119 70 Q123 73 127 70" opacity="0.4"/>
+
+  <!-- 嘴（紧抿） -->
+  <path d="M110 86 L120 86"/>
+
+  <!-- 托腮手 -->
+  <path d="M133 85 Q140 90 135 98 L130 95"/>
+  <path d="M133 85 L128 78" opacity="0.5"/>
+
+  <!-- 脖 -->
+  <path d="M109 92 L109 102 M121 92 L121 102"/>
+
+  <!-- 领口（卫衣宽松） -->
+  <path d="M88 110 Q115 103 148 110"/>
+
+  <!-- 身体（蜷缩坐姿，卫衣） -->
+  <path d="M88 110 Q82 160 88 210"/>
+  <path d="M148 110 Q160 140 155 190 Q150 220 130 225"/>
+
+  <!-- 抱膝腿 -->
+  <path d="M88 210 Q95 230 115 230 L135 225"/>
+  <path d="M100 225 Q108 245 128 240" opacity="0.7"/>
+
+  <!-- 凌乱地上（咖啡杯） -->
+  <rect x="70" y="265" width="14" height="18" rx="1" opacity="0.5"/>
+  <path d="M84 270 Q90 270 90 276 Q90 282 84 282" opacity="0.5"/>
+  <path d="M74 262 L74 258 M78 262 L78 256 M82 262 L82 258" opacity="0.3"/>
+
+  <!-- 地面 -->
+  <path d="M50 290 L190 290" stroke-dasharray="3 6" opacity="0.3"/>
+
+  <text x="120" y="312" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#a855f7" stroke="none" letter-spacing="2">AMDX · 凌晨哲学家</text>
+</svg>
