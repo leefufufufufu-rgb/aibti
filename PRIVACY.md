@@ -18,6 +18,26 @@ AIBTI runs **100% locally on your machine**. Your prompts, your conversations, y
 
 If you don't trust this README, **trust the code instead** — all 50 files are on GitHub.
 
+### Execution Model (most important)
+
+AIBTI is **100% passive by default**. It has no background process, no daemon, no watcher, no hook (unless you explicitly opt in via the separate advanced installer).
+
+```
+Life cycle of an AIBTI scan:
+  1. You type: "Analyze my AIBTI"   ← YOU initiate, always.
+  2. Claude reads existing ~/.claude/projects/*.jsonl (files that already exist).
+  3. Claude produces a report. Writes ~/.aibti/report.html.
+  4. AIBTI goes back to sleep. Nothing is watching you.
+
+When you're NOT asking:
+  · Zero code runs.
+  · Zero files are read.
+  · Zero network calls.
+  · Your normal Claude Code workflow is 100% unchanged.
+```
+
+**This is the opposite of productivity tools that "learn in the background."** AIBTI is a mirror you pick up when you want to look, and put down when you're done.
+
 ---
 
 ### What AIBTI Reads
