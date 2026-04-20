@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIBTI · Your AI Conversation Personality</title>
+<script>
+  // Language auto-route: Chinese browsers jump to zh version unless user manually picked en
+  (function() {
+    try {
+      var manual = localStorage.getItem('aibti-lang');
+      if (manual === 'en') return;
+      if (manual === 'zh') { location.replace('index.html'); return; }
+      var lang = (navigator.language || 'en').toLowerCase();
+      if (lang.startsWith('zh')) location.replace('index.html');
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -284,7 +296,7 @@
       <a href="#philosophy">Why</a>
     </div>
     <div class="nav-right">
-      <a href="index.html" class="lang-btn">中</a>
+      <a href="index.html" class="lang-btn" onclick="localStorage.setItem('aibti-lang','zh')">中</a>
       <a href="https://github.com/leefufufufufu-rgb/aibti" target="_blank" rel="noopener" class="gh-btn">★ Star</a>
     </div>
   </div>
@@ -292,7 +304,7 @@
 
 <section class="hero">
   <div class="container">
-    <div class="hero-tag"><span class="dot"></span>v0.1.0 · EXPERIMENTAL · kinda fun</div>
+    <div class="hero-tag"><span class="dot"></span>v0.2.0 · 100% LOCAL · Backed by AI Giants</div>
     <h1>Your <span class="accent">AI Chat</span><br>Personality Test</h1>
     <p class="hero-sub">
       You think you're prompting the AI. <span class="hl">The AI is profiling you.</span><br>
