@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="120" cy="155" r="135" stroke-dasharray="2 8" opacity="0.15"/>
+  <circle cx="120" cy="155" r="108" stroke-dasharray="1 6" opacity="0.25"/>
+
+  <!-- 光环 -->
+  <ellipse cx="120" cy="30" rx="28" ry="5" opacity="0.7"/>
+  <ellipse cx="120" cy="30" rx="22" ry="3.5" opacity="0.5"/>
+
+  <!-- 头 -->
+  <ellipse cx="120" cy="65" rx="22" ry="25"/>
+
+  <!-- 光头 -->
+  <path d="M100 52 Q120 45 140 52"/>
+
+  <!-- 闭眼（竖线一笔带过） -->
+  <path d="M108 62 Q112 64 116 62"/>
+  <path d="M124 62 Q128 64 132 62"/>
+
+  <!-- 微笑 -->
+  <path d="M112 80 Q120 86 128 80"/>
+
+  <!-- 脖 -->
+  <path d="M114 89 L114 96 M126 89 L126 96"/>
+
+  <!-- 僧袍领口 -->
+  <path d="M88 103 Q120 95 152 103"/>
+  <path d="M88 103 L78 118 L88 118"/>
+  <path d="M152 103 L162 118 L152 118"/>
+
+  <!-- 身体（宽袍盘坐上半身） -->
+  <path d="M88 118 Q70 180 75 220"/>
+  <path d="M152 118 Q170 180 165 220"/>
+
+  <!-- 盘腿 -->
+  <path d="M75 220 L55 258 L100 258"/>
+  <path d="M165 220 L185 258 L140 258"/>
+  <path d="M55 258 L185 258"/>
+
+  <!-- 手结印（放膝盖） -->
+  <circle cx="100" cy="235" r="4"/>
+  <circle cx="140" cy="235" r="4"/>
+  <path d="M96 235 L104 235 M136 235 L144 235" opacity="0.6"/>
+
+  <!-- 衣纹装饰 -->
+  <path d="M120 120 L120 220" stroke-dasharray="2 5" opacity="0.4"/>
+  <path d="M100 140 Q120 145 140 140" opacity="0.3"/>
+  <path d="M95 170 Q120 175 145 170" opacity="0.3"/>
+
+  <!-- 下方莲花座（简化） -->
+  <path d="M55 258 Q75 275 100 258 Q120 275 140 258 Q165 275 185 258" opacity="0.6"/>
+
+  <!-- 漂浮符号（禅） -->
+  <text x="45" y="90" font-size="18" stroke="none" fill="#a855f7" opacity="0.4">✧</text>
+  <text x="185" y="90" font-size="18" stroke="none" fill="#a855f7" opacity="0.4">✧</text>
+
+  <text x="120" y="310" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#a855f7" stroke="none" letter-spacing="2">AMLE · 佛系甲方</text>
+</svg>
